@@ -13,7 +13,7 @@ jobs:
       IMAGE_NAME: v5-bot
     steps:
       - name: Checkout me
-        uses: action/checkout@v2
+        uses: actions/checkout@v2
       - name: Checkout v5
         run: |
           git clone ${{ secrets.V5_BOT_URL }} v5
