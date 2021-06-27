@@ -1,7 +1,9 @@
 name: "构建v5-bot"
 on:
   workflow_dispatch:
-
+  repository_dispatch:
+    types: v5-bot
+  
 jobs:
   build:
     runs-on: ubuntu-latest
