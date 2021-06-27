@@ -1,0 +1,28 @@
+name: "构建v5-bot"
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
+    name: 构建v5-bot
+    env:
+      IMAGE_NAME: v5-bot
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@master
+        with:
+          repository: ${{ secrets.V5_BOT_URL }}
+          ref: master
+      - name: Build and publish image
+        uses: ilteoood/docker_buildx@master
+        with:
+          publish: true
+          imageName: ${{ secrets.DOCKER_V5_BOT_REGISTRY }}/${{ secrets.DOCKER_V5_BOT_REPO }}/${IMAGE_NAME}
+          dockerFile: Dockerfile
+          platform: linux/amd64,linux/arm64/v8,linux/arm/v7
+          tag: latest
+          dockerUser: ${{ secrets.DOCKER_USERNAME }}
+          dockerPassword: ${{ secrets.DOCKER_PASSWORD }}
+          dockerServer: ${{ secrets.DOCKER_SERVER }}
