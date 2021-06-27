@@ -24,3 +24,4 @@ jobs:
           dockerUser: ${{ secrets.DOCKER_USERNAME }}
           dockerPassword: ${{ secrets.DOCKER_PASSWORD }}
           dockerServer: ${{ secrets.DOCKER_SERVER }}
+          context: v5
