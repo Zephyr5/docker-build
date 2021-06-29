@@ -32,13 +32,22 @@ jobs:
           context: ${IMAGE_NAME}
       - name: Notify success
         if: ${{ success() }}
-        run: |
-          bash shell/tg-notify.sh ${{ secrets.TG_USER_ID }} ${{ secrets.TG_BOT_TOKEN }} "${IMAGE_NAME}构建成功🎉🎉🎉\n\n${IMAGE_NAME_FULL}"
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TG_USER_ID }}
+          token: ${{ secrets.TG_BOT_TOKEN }}
+          args: "${IMAGE_NAME}构建成功🎉🎉🎉\n\n${IMAGE_NAME_FULL}"
       - name: Notify fail
         if: ${{ failure() }}
-        run: |
-          bash shell/tg-notify.sh ${{ secrets.TG_USER_ID }} ${{ secrets.TG_BOT_TOKEN }} "${IMAGE_NAME}构建失败😔😔😔\n\n${IMAGE_NAME_FULL}"
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TG_USER_ID }}
+          token: ${{ secrets.TG_BOT_TOKEN }}
+          args: "${IMAGE_NAME}构建失败😔😔😔\n\n${IMAGE_NAME_FULL}"
       - name: Delete workflow runs
         if: ${{ always() }}
-        run: |
-          bash shell/delete-workflow.sh ${{ secrets.GH_WORKFLOW_TOKEN }} ${{ github.repository }}
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.GH_WORKFLOW_TOKEN }}
+          repository: ${{ github.repository }}
+          event-type: delete-workflow
