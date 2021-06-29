@@ -15,29 +15,29 @@ jobs:
     steps:
       - name: Checkout me
         uses: actions/checkout@v2
-      - name: Checkout ${{ env.IMAGE_NAME }}
+      - name: Checkout ${IMAGE_NAME}
         run: |
-          git clone ${{ secrets.V5_BOT_URL }} ${{ env.IMAGE_NAME }}
+          git clone ${{ secrets.V5_BOT_URL }} ${IMAGE_NAME}
       - name: Build and publish image
         uses: ilteoood/docker_buildx@master
         with:
           publish: true
-          imageName: ${{ env.IMAGE_NAME_FULL }}
+          imageName: ${IMAGE_NAME_FULL}
           dockerFile: ${IMAGE_NAME}/Dockerfile
           platform: linux/amd64
           tag: latest
           dockerUser: ${{ secrets.DOCKER_USERNAME }}
           dockerPassword: ${{ secrets.DOCKER_PASSWORD }}
           dockerServer: ${{ secrets.DOCKER_SERVER }}
-          context: ${{ env.IMAGE_NAME }}
+          context: ${IMAGE_NAME}
       - name: Notify success
         if: ${{ success() }}
         run: |
-          bash shell/tg-notify.sh ${{ secrets.TG_USER_ID }} ${{ secrets.TG_BOT_TOKEN }} "${{ env.IMAGE_NAME }}构建成功\n\n${{ env.IMAGE_NAME_FULL }}"
+          bash shell/tg-notify.sh ${{ secrets.TG_USER_ID }} ${{ secrets.TG_BOT_TOKEN }} "${IMAGE_NAME}构建成功\n\n${IMAGE_NAME_FULL}"
       - name: Notify fail
         if: ${{ failure() }}
         run: |
-          bash shell/tg-notify.sh ${{ secrets.TG_USER_ID }} ${{ secrets.TG_BOT_TOKEN }} "${{ env.IMAGE_NAME }}构建失败\n\n${{ env.IMAGE_NAME_FULL }}"
+          bash shell/tg-notify.sh ${{ secrets.TG_USER_ID }} ${{ secrets.TG_BOT_TOKEN }} "${IMAGE_NAME}构建失败\n\n${IMAGE_NAME_FULL}"
       - name: Delete workflow runs
         if: ${{ always() }}
         uses: Mattraks/delete-workflow-runs@main
