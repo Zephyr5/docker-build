@@ -12,7 +12,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     if: github.event.repository.owner.id == github.event.sender.id
-    name: 构建v5-bot
+    name: 构建${{ env.IMAGE_NAME }}
     
     steps:
       - name: Checkout me
@@ -38,14 +38,14 @@ jobs:
         with:
           to: ${{ secrets.TG_USER_ID }}
           token: ${{ secrets.TG_BOT_TOKEN }}
-          args: ${IMAGE_NAME}构建成功🎉🎉🎉\n\n${IMAGE_NAME_FULL}
+          args: "${{ env.IMAGE_NAME }}构建成功🎉🎉🎉\n\n${{ env.IMAGE_NAME_FULL }}"
       - name: Notify fail
         if: ${{ failure() }}
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TG_USER_ID }}
           token: ${{ secrets.TG_BOT_TOKEN }}
-          args: ${IMAGE_NAME}构建失败😔😔😔\n\n${IMAGE_NAME_FULL}
+          args: "${{ env.IMAGE_NAME }}构建失败😔😔😔\n\n${{ env.IMAGE_NAME_FULL }}"
       - name: Delete workflow runs
         if: ${{ always() }}
         uses: peter-evans/repository-dispatch@v1
