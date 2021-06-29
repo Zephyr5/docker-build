@@ -11,7 +11,7 @@ jobs:
     name: 构建v5-bot
     env:
       IMAGE_NAME: v5-bot
-      IMAGE_NAME_FULL: ${{ secrets.DOCKER_V5_BOT_REGISTRY }}/${{ secrets.DOCKER_V5_BOT_REPO }}/${ IMAGE_NAME }
+      IMAGE_NAME_FULL: ${{ secrets.DOCKER_V5_BOT_REGISTRY }}/${{ secrets.DOCKER_V5_BOT_REPO }}/v5-bot
     steps:
       - name: Checkout me
         uses: actions/checkout@v2
