@@ -39,6 +39,7 @@ jobs:
         run: |
           bash shell/tg-notify.sh ${{ secrets.TG_USER_ID }} ${{ secrets.TG_BOT_TOKEN }} "${IMAGE_NAME}构建失败\n\n${IMAGE_NAME_FULL}"
       - name: Delete workflow runs
+        if: ${{ always() }}
         uses: Mattraks/delete-workflow-runs@main
         with:
           retain_days: 0
