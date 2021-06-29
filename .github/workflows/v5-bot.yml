@@ -37,7 +37,7 @@ jobs:
       - name: Notify fail
         if: ${{ failure() }}
         run: |
-          bash shell/tg-notify.sh ${{ secrets.TG_USER_ID }} ${{ secrets.TG_BOT_TOKEN }} "${IMAGE_NAME}构建失败\n\n${IMAGE_NAME_FULL}"
+          bash shell/tg-notify.sh ${{ secrets.TG_USER_ID }} ${{ secrets.TG_BOT_TOKEN }} "${IMAGE_NAME}构建失败😔😔😔\n\n${IMAGE_NAME_FULL}"
       - name: Delete workflow runs
         if: ${{ always() }}
         run: |
