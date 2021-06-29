@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: Checkout me
         uses: actions/checkout@v2
-      - name: Checkout ${IMAGE_NAME}
+      - name: Checkout ${{ env.IMAGE_NAME }}
         run: |
           git clone ${{ secrets.V5_BOT_URL }} ${IMAGE_NAME}
       - name: Build and publish image
