@@ -11,32 +11,33 @@ jobs:
     name: 构建v5-bot
     env:
       IMAGE_NAME: v5-bot
+      IMAGE_NAME_FULL: ${{ secrets.DOCKER_V5_BOT_REGISTRY }}/${{ secrets.DOCKER_V5_BOT_REPO }}/${IMAGE_NAME}
     steps:
       - name: Checkout me
         uses: actions/checkout@v2
       - name: Checkout v5
         run: |
-          git clone ${{ secrets.V5_BOT_URL }} v5
+          git clone ${{ secrets.V5_BOT_URL }} ${IMAGE_NAME}
       - name: Build and publish image
         uses: ilteoood/docker_buildx@master
         with:
           publish: true
-          imageName: ${{ secrets.DOCKER_V5_BOT_REGISTRY }}/${{ secrets.DOCKER_V5_BOT_REPO }}/${IMAGE_NAME}
+          imageName: ${IMAGE_NAME_FULL}
           dockerFile: v5/Dockerfile
           platform: linux/amd64
           tag: latest
           dockerUser: ${{ secrets.DOCKER_USERNAME }}
           dockerPassword: ${{ secrets.DOCKER_PASSWORD }}
           dockerServer: ${{ secrets.DOCKER_SERVER }}
-          context: v5
+          context: ${IMAGE_NAME}
       - name: Notify success
         if: ${{ success() }}
         run: |
-          echo "成功"
+          bash shell/tg-notify.sh ${{ secrets.TG_USER_ID }} ${{ secrets.TG_BOT_TOKEN }} "构建成功\n\n${IMAGE_NAME_FULL}"
       - name: Notify fail
         if: ${{ failure() }}
         run: |
-          echo "失败"
+          bash shell/tg-notify.sh ${{ secrets.TG_USER_ID }} ${{ secrets.TG_BOT_TOKEN }} "构建失败\n\n${IMAGE_NAME_FULL}"
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@main
         with:
