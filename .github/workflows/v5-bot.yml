@@ -3,19 +3,21 @@ on:
   workflow_dispatch:
   repository_dispatch:
     types: v5-bot
-  
+ 
+env:
+  IMAGE_NAME: v5-bot
+  IMAGE_NAME_FULL: ${{ secrets.DOCKER_V5_BOT_REGISTRY }}/${{ secrets.DOCKER_V5_BOT_REPO }}/v5-bot
+
 jobs:
   build:
     runs-on: ubuntu-latest
     if: github.event.repository.owner.id == github.event.sender.id
     name: 构建v5-bot
-    env:
-      IMAGE_NAME: v5-bot
-      IMAGE_NAME_FULL: ${{ secrets.DOCKER_V5_BOT_REGISTRY }}/${{ secrets.DOCKER_V5_BOT_REPO }}/v5-bot
+    
     steps:
       - name: Checkout me
         uses: actions/checkout@v2
-      - name: Checkout v5
+      - name: Checkout ${IMAGE_NAME}
         run: |
           git clone ${{ secrets.V5_BOT_URL }} ${IMAGE_NAME}
       - name: Build and publish image
