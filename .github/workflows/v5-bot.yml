@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Checkout me
         uses: actions/checkout@v2
-      - name: Checkout ${IMAGE_NAME}
+      - name: Checkout v5
         run: |
           git clone ${{ secrets.V5_BOT_URL }} ${IMAGE_NAME}
       - name: Build and publish image
@@ -33,14 +33,11 @@ jobs:
       - name: Notify success
         if: ${{ success() }}
         run: |
-          bash shell/tg-notify.sh ${{ secrets.TG_USER_ID }} ${{ secrets.TG_BOT_TOKEN }} "${IMAGE_NAME}构建成功\n\n${IMAGE_NAME_FULL}"
+          bash shell/tg-notify.sh ${{ secrets.TG_USER_ID }} ${{ secrets.TG_BOT_TOKEN }} "${IMAGE_NAME}构建成功🎉🎉🎉\n\n${IMAGE_NAME_FULL}"
       - name: Notify fail
         if: ${{ failure() }}
         run: |
           bash shell/tg-notify.sh ${{ secrets.TG_USER_ID }} ${{ secrets.TG_BOT_TOKEN }} "${IMAGE_NAME}构建失败\n\n${IMAGE_NAME_FULL}"
       - name: Delete workflow runs
         if: ${{ always() }}
-        uses: Mattraks/delete-workflow-runs@main
-        with:
-          retain_days: 0
-          keep_minimum_runs: 0
+        bash shell/delete-workflow.sh ${{ secrets.GITHUB_TOKEN }} ${{ github.repository }}

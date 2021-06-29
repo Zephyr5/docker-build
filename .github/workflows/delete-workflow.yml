@@ -1,0 +1,21 @@
+name: "删除workflow历史"
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: delete-workflow
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
+    name: 删除
+    steps:
+      - name: 延迟一下
+        run: |
+          sleep 5
+      - name: Delete workflow runs
+        if: ${{ always() }}
+        uses: Mattraks/delete-workflow-runs@main
+        with:
+          retain_days: 0
+          keep_minimum_runs: 0
