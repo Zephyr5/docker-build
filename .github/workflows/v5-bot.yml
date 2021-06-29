@@ -41,4 +41,4 @@ jobs:
       - name: Delete workflow runs
         if: ${{ always() }}
         run: |
-          bash shell/delete-workflow.sh ${{ secrets.GITHUB_TOKEN }} ${{ github.repository }}
+          bash shell/delete-workflow.sh ${{ secrets.GH_WORKFLOW_TOKEN }} ${{ github.repository }}
